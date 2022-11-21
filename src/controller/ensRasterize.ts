@@ -3,10 +3,10 @@ import { rasterize } from '../service/rasterize';
 
 /* istanbul ignore next */
 export async function ensRasterize(req: Request, res: Response) {
-  // #swagger.description = 'ENS NFT image rasterization'
+  // #swagger.description = 'CNS NFT image rasterization'
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
   // #swagger.parameters['{}'] = { name: 'contractAddress', description: 'Contract address which stores the NFT indicated by the tokenId', schema: { $ref: '#/definitions/contractAddress' } }
-  // #swagger.parameters['tokenId'] = { type: 'string', description: 'Labelhash(v1) /Namehash(v2) of your ENS name.\n\nMore: https://docs.ens.domains/contract-api-reference/name-processing#hashing-names', schema: { $ref: '#/definitions/tokenId' } }
+  // #swagger.parameters['tokenId'] = { type: 'string', description: 'Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names', schema: { $ref: '#/definitions/tokenId' } }
   const { contractAddress, networkName, tokenId } = req.params;
   try {
     const raster = await rasterize(contractAddress, networkName, tokenId);

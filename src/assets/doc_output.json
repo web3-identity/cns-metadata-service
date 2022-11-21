@@ -2,20 +2,19 @@
   "openapi": "3.0.0",
   "info": {
     "version": "0.0.1-alpha.1",
-    "title": "ENS Metadata Service",
-    "description": "Set of endpoints to query ENS metadata and more",
-    "contact": "contact@ens.domains",
-    "license": "MIT License",
-    "x-logo": {
-      "url": "/assets/logo.svg",
-      "backgroundColor": "#FFFFFF",
-      "altText": "Ethereum Name Service"
+    "title": "CNS Metadata Service",
+    "description": "Set of endpoints to query CNS metadata and more",
+    "contact": "contact@cns.domains",
+    "liccnse": "MIT Liccnse",
+    "x_logo": {
+      "url": "./src/assets/logo.svg",
+      "backgroundColor": "#FFFFFF"
     }
   },
   "paths": {
     "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40})}/{tokenId}": {
       "get": {
-        "description": "ENS NFT metadata",
+        "description": "CNS NFT metadata",
         "parameters": [
           {
             "name": "networkName",
@@ -26,11 +25,11 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40})",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/contractAddress"
+              "type": "string"
             }
           },
           {
@@ -41,7 +40,14 @@
               "$ref": "#/components/schemas/tokenId"
             },
             "type": "string",
-            "description": "Labelhash(v1) /Namehash(v2) of your ENS name.\n\nMore: https://docs.ens.domains/contract-api-reference/name-processing#hashing-names"
+            "description": "Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names"
+          },
+          {
+            "name": "{}",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -50,12 +56,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ENSMetadata"
+                  "$ref": "#/components/schemas/CNSMetadata"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/ENSMetadata"
+                  "$ref": "#/components/schemas/CNSMetadata"
                 }
               }
             }
@@ -68,13 +74,16 @@
           },
           "501": {
             "description": "Unsupported network"
+          },
+          "504": {
+            "description": "Gateway Timeout"
           }
         }
       }
     },
     "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40})}/{tokenId}/image": {
       "get": {
-        "description": "ENS NFT image",
+        "description": "CNS NFT image",
         "parameters": [
           {
             "name": "networkName",
@@ -85,11 +94,11 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40})",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/contractAddress"
+              "type": "string"
             }
           },
           {
@@ -100,7 +109,14 @@
               "$ref": "#/components/schemas/tokenId"
             },
             "type": "string",
-            "description": "Labelhash(v1) /Namehash(v2) of your ENS name.\n\nMore: https://docs.ens.domains/contract-api-reference/name-processing#hashing-names"
+            "description": "Labelhash(v1) /Namehash(v2) of your ENS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names"
+          },
+          {
+            "name": "{}",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -112,13 +128,16 @@
           },
           "501": {
             "description": "Unsupported network"
+          },
+          "504": {
+            "description": "Gateway Timeout"
           }
         }
       }
     },
     "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40})}/{tokenId}/rasterize": {
       "get": {
-        "description": "ENS NFT image rasterization",
+        "description": "CNS NFT image rasterization",
         "parameters": [
           {
             "name": "networkName",
@@ -129,11 +148,11 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40})",
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/contractAddress"
+              "type": "string"
             }
           },
           {
@@ -144,7 +163,14 @@
               "$ref": "#/components/schemas/tokenId"
             },
             "type": "string",
-            "description": "Labelhash(v1) /Namehash(v2) of your ENS name.\n\nMore: https://docs.ens.domains/contract-api-reference/name-processing#hashing-names"
+            "description": "Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names"
+          },
+          {
+            "name": "{}",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -153,16 +179,13 @@
           },
           "500": {
             "description": "Internal Server Error"
-          },
-          "501": {
-            "description": "Unsupported network"
           }
         }
       }
     },
     "/{networkName}/avatar/{name}/meta": {
       "get": {
-        "description": "ENS avatar metadata",
+        "description": "CNS avatar metadata",
         "parameters": [
           {
             "name": "networkName",
@@ -177,9 +200,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ensName"
+              "$ref": "#/components/schemas/cnsName"
             },
-            "description": "ENS name"
+            "description": "CNS name"
           }
         ],
         "responses": {
@@ -203,13 +226,16 @@
           },
           "501": {
             "description": "Unsupported network"
+          },
+          "504": {
+            "description": "Gateway Timeout"
           }
         }
       }
     },
     "/{networkName}/avatar/{name}": {
       "get": {
-        "description": "ENS avatar image",
+        "description": "cNS avatar image",
         "parameters": [
           {
             "name": "networkName",
@@ -224,9 +250,9 @@
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/ensName"
+              "$ref": "#/components/schemas/cnsName"
             },
-            "description": "ENS name"
+            "description": "cNS name"
           }
         ],
         "responses": {
@@ -238,6 +264,9 @@
           },
           "501": {
             "description": "Unsupported network"
+          },
+          "504": {
+            "description": "Gateway Timeout"
           }
         }
       }
@@ -270,14 +299,14 @@
     "examples": {
       "AvatarMetadata": {
         "value": {
-          "$uri": "matoken.eth",
+          "$uri": "matoken.web3",
           "is_owner": true,
           "host_meta": {
             "chain_id": 1,
             "namespace": "erc721",
             "contract_address": "0x31385d3520bced94f77aae104b406994d8f2168c",
             "token_id": "9421",
-            "reference_url": "https://opensea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/9421"
+            "reference_url": "https://opcnsea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/9421"
           },
           "$name": "BASTARD GAN PUNK V2 #9421",
           "$description": "FOR THE CHANCES\nI HAVEN'T GOT A BURIAL IN MY ARMS\nAND I'VE HAD ENOUGH\nTIME IS NOW\nIT'S TIME\nI'VE GOT NOTHING TO PROVE\nI'VE GOT NOTHING TO LOSE\n",
@@ -298,10 +327,10 @@
           "image": "https://ipfs.io/ipfs/QmRagxjj2No4T8gNCjpM42mLZGQE3ZwMYdTFUYe6e6LMBG"
         }
       },
-      "ENSMetadata": {
+      "CNSMetadata": {
         "value": {
-          "$name": "nick.eth",
-          "$description": "nick.eth, an ENS name.",
+          "$name": "nick.web3",
+          "$description": "nick.web3, an CNS name.",
           "$attributes": [
             {
               "trait_type": "Created Date",
@@ -325,10 +354,10 @@
             }
           ],
           "name_length": 4,
-          "url": "https://app.ens.domains/name/nick.eth",
+          "url": "https://app-test.web3verse.space/name/nick.web3",
           "version": 0,
-          "background_image": "https://metadata.ens.domains/mainnet/avatar/nick.eth",
-          "image_url": "https://metadata.ens.domains/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5d5727cb0fb76e4944eafb88ec9a3cf0b3c9025a4b2f947729137c5d7f84f68f/image"
+          "background_image": "http://localhost:8080/mainnet/avatar/nick.web3",
+          "image_url": "http://localhost:8080/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5d5727cb0fb76e4944eafb88ec9a3cf0b3c9025a4b2f947729137c5d7f84f68f/image"
         }
       }
     },
@@ -338,7 +367,7 @@
         "properties": {
           "uri": {
             "type": "string",
-            "example": "ENS name of avatar holder"
+            "example": "CNS name of avatar holder"
           },
           "is_owner": {
             "type": "string",
@@ -413,32 +442,32 @@
           "name": "AvatarMetadata"
         }
       },
-      "ENSMetadata": {
+      "CNSMetadata": {
         "type": "object",
         "properties": {
           "name": {
             "type": "string",
-            "example": "ENS name"
+            "example": "CNS name"
           },
           "description": {
             "type": "string",
-            "example": "Short ENS name description"
+            "example": "Short CNS name description"
           },
           "attributes": {
             "type": "string",
-            "example": "Custom traits about ENS"
+            "example": "Custom traits about CNS"
           },
           "name_length": {
             "type": "string",
-            "example": "Character length of ens name"
+            "example": "Character length of cns name"
           },
           "url": {
             "type": "string",
-            "example": "ENS App URL of the name"
+            "example": "CNS App URL of the name"
           },
           "version": {
             "type": "string",
-            "example": "ENS NFT version"
+            "example": "CNS NFT version"
           },
           "background_image": {
             "type": "string",
@@ -446,7 +475,7 @@
           },
           "image_url": {
             "type": "string",
-            "example": "URL of ENS NFT image"
+            "example": "URL of CNS NFT image"
           }
         },
         "required": [
@@ -460,7 +489,7 @@
           "image_url"
         ],
         "xml": {
-          "name": "ENSMetadata"
+          "name": "CNSMetadata"
         }
       },
       "contractAddress": {
@@ -470,11 +499,11 @@
           "name": "contractAddress"
         }
       },
-      "ensName": {
+      "cnsName": {
         "type": "string",
-        "example": "nick.eth",
+        "example": "nick.web3",
         "xml": {
-          "name": "ensName"
+          "name": "cnsName"
         }
       },
       "tokenId": {
@@ -489,9 +518,7 @@
         "type": "string",
         "enum": [
           "mainnet",
-          "rinkeby",
-          "ropsten",
-          "goerli"
+          "testnet"
         ],
         "xml": {
           "name": "networkName"

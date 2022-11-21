@@ -13,9 +13,9 @@ import { getAvatarImage } from '../service/avatar';
 import getNetwork from '../service/network';
 
 export async function avatarImage(req: Request, res: Response) {
-  // #swagger.description = 'ENS avatar image'
+  // #swagger.description = 'cNS avatar image'
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
-  // #swagger.parameters['name'] = { description: 'ENS name', schema: { $ref: '#/definitions/ensName' } }
+  // #swagger.parameters['name'] = { description: 'cNS name', schema: { $ref: '#/definitions/cnsName' } }
   res.setTimeout(RESPONSE_TIMEOUT, () => {
     res.status(504).json({ message: 'Timeout' });
   })

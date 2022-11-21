@@ -4,7 +4,8 @@ const PORT = process.env.PORT || 8080;
 const HOST = process.env.HOST || 'localhost';
 const ENV = process.env.ENV || 'local'; // local/prod
 const SERVER_URL =
-  ENV === 'local' ? `http://localhost:${PORT}` : `https://${HOST}`;
+  ENV === 'local' ? `http://localhost:${PORT}` : `${HOST}`;
+const APP_URL = 'https://app-test.web3verse.space'
 
 const outputFile = './src/assets/doc_output.json';
 const endpointsFiles = ['./src/endpoint.ts'];
@@ -12,10 +13,10 @@ const endpointsFiles = ['./src/endpoint.ts'];
 const doc = {
   info: {
     version: '0.0.1-alpha.1',
-    title: 'ENS Metadata Service',
-    description: 'Set of endpoints to query ENS metadata and more',
-    contact: 'contact@ens.domains',
-    license: 'MIT License',
+    title: 'CNS Metadata Service',
+    description: 'Set of endpoints to query CNS metadata and more',
+    contact: 'contact@cns.domains',
+    liccnse: 'MIT Liccnse',
     x_logo: {
       url: './src/assets/logo.svg',
       backgroundColor: '#FFFFFF',
@@ -24,7 +25,7 @@ const doc = {
   host: SERVER_URL,
   definitions: {
     AvatarMetadata: {
-      $uri: 'ENS name of avatar holder',
+      $uri: 'CNS name of avatar holder',
       is_owner: 'Ownership verification of NFT',
       host_meta: {
         chain_id: 'Chain ID where NFT resides',
@@ -44,28 +45,28 @@ const doc = {
         background_color: 'Background color of NFT',
         youtube_url: 'Youtube URL of NFT'
     },
-    ENSMetadata: {
-      $name: 'ENS name',
-      $description: 'Short ENS name description',
-      $attributes: 'Custom traits about ENS',
-      $name_length: 'Character length of ens name',
-      $url: 'ENS App URL of the name',
-      $version: 'ENS NFT version',
+    CNSMetadata: {
+      $name: 'CNS name',
+      $description: 'Short CNS name description',
+      $attributes: 'Custom traits about CNS',
+      $name_length: 'Character length of cns name',
+      $url: 'CNS App URL of the name',
+      $version: 'CNS NFT version',
       $background_image: 'Origin URL of avatar image',
-      $image_url: 'URL of ENS NFT image',
+      $image_url: 'URL of CNS NFT image',
     },
     contractAddress: '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85',
-    ensName: 'nick.eth',
+    cnsName: 'nick.web3',
     tokenId: '4221908525551133525058944220830153...',
     networkName: {
       description: 'Name of the chain to query for.',
-      '@enum': ['mainnet', 'rinkeby', 'ropsten', 'goerli'],
+      '@enum': ['mainnet', 'testnet'],
     },
   },
   components: {
     examples: {
       AvatarMetadata: {
-        $uri: 'matoken.eth',
+        $uri: 'matoken.web3',
         is_owner: true,
         host_meta: {
           chain_id: 1,
@@ -73,7 +74,7 @@ const doc = {
           contract_address: '0x31385d3520bced94f77aae104b406994d8f2168c',
           token_id: '9421',
           reference_url:
-            'https://opensea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/9421',
+            'https://opcnsea.io/assets/0x31385d3520bced94f77aae104b406994d8f2168c/9421',
         },
         $name: 'BASTARD GAN PUNK V2 #9421',
         $description:
@@ -95,9 +96,9 @@ const doc = {
         image:
           'https://ipfs.io/ipfs/QmRagxjj2No4T8gNCjpM42mLZGQE3ZwMYdTFUYe6e6LMBG',
       },
-      ENSMetadata: {
-        $name: 'nick.eth',
-        $description: 'nick.eth, an ENS name.',
+      CNSMetadata: {
+        $name: 'nick.web3',
+        $description: 'nick.web3, an CNS name.',
         $attributes: [
           {
             trait_type: 'Created Date',
@@ -121,12 +122,12 @@ const doc = {
           },
         ],
         name_length: 4,
-        url: 'https://app.ens.domains/name/nick.eth',
+        url: `${APP_URL}/name/nick.web3`,
         version: 0,
         background_image:
-          'https://metadata.ens.domains/mainnet/avatar/nick.eth',
+          `${SERVER_URL}/mainnet/avatar/nick.web3`,
         image_url:
-          'https://metadata.ens.domains/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5d5727cb0fb76e4944eafb88ec9a3cf0b3c9025a4b2f947729137c5d7f84f68f/image',
+          `${SERVER_URL}/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5d5727cb0fb76e4944eafb88ec9a3cf0b3c9025a4b2f947729137c5d7f84f68f/image`,
       },
     },
   },

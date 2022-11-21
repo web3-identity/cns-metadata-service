@@ -26,15 +26,24 @@ const setCacheHeader = function (
 const app = express();
 app.use(cors());
 
-if (process.env.ENV === 'local') {
-  app.use('/assets', express.static(path.join(__dirname, 'assets')));
-}
+
+// if (process.env.ENV === 'local') {
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.get(
+  '/docs',
+  docUI({
+    title: 'CNS Metadata Service',
+    specUrl: '/assets/doc_output.json',
+  })
+);
+// }
 
 // apply cache header for all get requests
 app.use(setCacheHeader);
 endpoints(app);
 
 app.use(compression({ filter: shouldCompress }));
+
 
 function shouldCompress(req: Request, res: Response) {
   if (req.headers['x-no-compression']) {
@@ -50,13 +59,5 @@ const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`APP_LOG::App listening on port ${PORT}`);
 });
-
-app.get(
-  '/docs',
-  docUI({
-    title: 'ENS Metadata Service',
-    specUrl: '/assets/doc_output.json',
-  })
-);
 
 module.exports = app;
