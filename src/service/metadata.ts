@@ -7,7 +7,7 @@ import createSVGfromTemplate                    from '../svg-template';
 import base64EncodeUnicode                      from '../utils/base64encode';
 import { isASCII, findCharacterSet }            from '../utils/characterSet';
 import { getCodePointLength, getSegmentLength } from '../utils/charLength';
-
+import {APP_URL}                                from '../config'
 // no ts decleration files
 
 const { createCanvas, registerFont } = require('canvas');
@@ -96,7 +96,7 @@ https://en.wikipedia.org/wiki/IDN_homograph_attack';
       value: this.segment_length,
     });
     this.url = this.is_normalized
-      ? `https://app.ens.domains/name/${name}`
+      ? `${APP_URL}/setting/${name}`//`https://app.ens.domains/name/${name}`
       : null;
     this.version = version;
     this.addAttribute({
