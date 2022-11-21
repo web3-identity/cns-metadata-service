@@ -18,7 +18,7 @@ const ADDRESS_ETH_REGISTRY = process.env.ADDRESS_ETH_REGISTRY || '0x8E6BDf2Ef7Ef
 const ADDRESS_NAME_WRAPPER = process.env.ADDRESS_NAME_WRAPPER || '0x862d4eb4b30D71d5a1020CA8F972C8914470955E'//'0x582224b8d4534F4749EFA4f22eF7241E0C56D4B8';
 
 const SERVER_URL =
-  ENV === 'local' ? `http://localhost:${PORT}` : `https://${HOST}`;
+  ENV === 'local' ? `http://localhost:${PORT}` : `${HOST}`;
 const APP_URL = 'https://app-test.web3verse.space'
 
 const ETH_REGISTRY_ABI = [
