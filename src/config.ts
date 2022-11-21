@@ -19,6 +19,7 @@ const ADDRESS_NAME_WRAPPER = process.env.ADDRESS_NAME_WRAPPER || '0x862d4eb4b30D
 
 const SERVER_URL =
   ENV === 'local' ? `http://localhost:${PORT}` : `https://${HOST}`;
+const APP_URL = 'https://app-test.web3verse.space'
 
 const ETH_REGISTRY_ABI = [
   'function recordExists(bytes32 node) external view returns (bool)'
@@ -39,4 +40,5 @@ export {
   INFURA_API_KEY,
   RESPONSE_TIMEOUT,
   SERVER_URL,
+  APP_URL
 };

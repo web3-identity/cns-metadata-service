@@ -8,7 +8,7 @@ const WEB3_API = {
   INFURA: 'https://infura.io/v3/',
   CLOUDFLARE: 'https://web3metadata.ens.domains/v1',
   CONFURA: 'https://confluxrpc.com',
-  CFXBRIDGE: 'http://127.0.0.1:8545',//'http://149.129.36.242:11451/bridge',//'https://cfx2eth.conflux123.xyz'
+  CFXBRIDGE: 'http://101.42.88.184:8101',//'http://149.129.36.242:11451/bridge',//'https://cfx2eth.conflux123.xyz'
 }
 
 const NETWORK = {

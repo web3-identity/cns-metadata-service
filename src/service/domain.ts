@@ -8,6 +8,7 @@ import {
 import { Metadata } from './metadata';
 import { getAvatarImage } from './avatar';
 import { ExpiredNameError, SubgraphRecordNotFound, Version } from '../base';
+import { SERVER_URL } from '../config';
 import { debug } from 'debug';
 var _debug = debug("domains")
 
@@ -73,10 +74,10 @@ export async function getDomain(
       metadata.generateImage();
     } else {
       metadata.setBackground(
-        `https://metadata.ens.domains/${networkName}/avatar/${name}`
+        `${SERVER_URL}/${networkName}/avatar/${name}`
       );
       metadata.setImage(
-        `https://metadata.ens.domains/${networkName}/${contractAddress}/${hexId}/image`
+        `${SERVER_URL}/${networkName}/${contractAddress}/${hexId}/image`
       );
     }
   }
