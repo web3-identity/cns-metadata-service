@@ -18,6 +18,8 @@ import { getDomain } from '../service/domain';
 import { Metadata } from '../service/metadata';
 import getNetwork from '../service/network';
 import { constructEthNameHash } from '../utils/namehash';
+import { debug } from 'debug';
+var _debug = debug("endMetadata")
 
 export async function ensMetadata(req: Request, res: Response) {
   // #swagger.description = 'ENS NFT metadata'
@@ -32,6 +34,7 @@ export async function ensMetadata(req: Request, res: Response) {
   const { provider, SUBGRAPH_URL } = getNetwork(networkName);
   try {
     var { tokenId, version } = await checkContract(provider, contractAddress, identifier);
+    _debug("check contract: %s %s", tokenId, version)
     const result = await getDomain(
       provider,
       networkName,
@@ -45,9 +48,11 @@ export async function ensMetadata(req: Request, res: Response) {
              description: 'Metadata object',
              schema: { $ref: '#/definitions/ENSMetadata' }
     } */
+    _debug("get domain done: ", result)
     res.json(result);
     return;
   } catch (error: any) {
+    _debug("get domain eror: ",error)
     let errCode = (error?.code && Number(error.code)) || 500;
     /* #swagger.responses[500] = { 
              description: 'Internal Server Error'

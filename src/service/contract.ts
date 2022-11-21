@@ -1,6 +1,8 @@
 import { strict as assert } from 'assert';
 import { ethers } from 'ethers';
 import { ContractMismatchError, Version } from '../base';
+import { debug } from 'debug';
+var _debug = debug("contract")
 
 import {
   ADDRESS_ETH_REGISTRAR,
@@ -10,11 +12,18 @@ import {
 import { getLabelhash } from '../utils/labelhash';
 import { getNamehash } from '../utils/namehash';
 
+_debug('contracts config',{
+  ADDRESS_ETH_REGISTRAR,
+  ADDRESS_NAME_WRAPPER,
+  INAMEWRAPPER,
+})
+
 export async function checkContract(
   provider: ethers.providers.BaseProvider,
   contractAddress: string,
   identifier: string
-): Promise<{tokenId: string, version: Version}> {
+): Promise<{ tokenId: string, version: Version }> {
+  _debug("start check contract:", contractAddress, identifier)
   const _contractAddress = ethers.utils.getAddress(contractAddress);
   const contract = new ethers.Contract(
     _contractAddress,
@@ -31,10 +40,12 @@ export async function checkContract(
     const _tokenId = getLabelhash(identifier);
     try {
       const nftOwner = await contract.ownerOf(_tokenId);
+      _debug("get nft owner:", nftOwner)
       if (nftOwner === ADDRESS_NAME_WRAPPER) {
         return { tokenId: _tokenId, version: Version.v1w };
       }
     } catch (error) {
+      _debug("get nft owner error:", error)
       console.warn('error', error);
       // throw new OwnerNotFoundError(
       //   `Checking owner of ${tokenId} failed. Reason: ${error}`
@@ -44,6 +55,9 @@ export async function checkContract(
   } else {
     try {
       if (_contractAddress !== ADDRESS_ETH_REGISTRAR) {
+        _debug('not eth_registrar', {
+          _contractAddress, ADDRESS_ETH_REGISTRAR
+        })
         const isInterfaceSupported = await contract.supportsInterface(INAMEWRAPPER);
         assert(isInterfaceSupported);
         return { tokenId: getNamehash(identifier), version: Version.v2 };

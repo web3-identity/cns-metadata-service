@@ -24,8 +24,9 @@ export function rasterize(
       .then((response: any) =>
         resolve(Buffer.from(response.data, 'binary').toString('base64'))
       )
-      .catch(({ response }: any) => {
-        const { status, statusText } = response;
+      .catch((err: Error) => {
+        console.error("failed to retrive rasterize", err);
+        const { status, statusText } = (err as any).response;
         reject({ status, statusText });
       });
   });

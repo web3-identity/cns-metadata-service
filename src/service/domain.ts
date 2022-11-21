@@ -8,6 +8,8 @@ import {
 import { Metadata } from './metadata';
 import { getAvatarImage } from './avatar';
 import { ExpiredNameError, SubgraphRecordNotFound, Version } from '../base';
+import { debug } from 'debug';
+var _debug = debug("domains")
 
 const eth =
   '0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae';
@@ -36,6 +38,7 @@ export async function getDomain(
   const queryDocument: any =
     version !== Version.v2 ? GET_DOMAINS_BY_LABELHASH : GET_DOMAINS;
   const result = await request(SUBGRAPH_URL, queryDocument, { tokenId: hexId });
+  _debug("get domain by grp done:", result);
   const domain = version !== Version.v2 ? result.domains[0] : result.domain;
   if (!(domain && Object.keys(domain).length))
     throw new SubgraphRecordNotFound(`No record for ${hexId}`);
