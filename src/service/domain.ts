@@ -10,10 +10,11 @@ import { getAvatarImage } from './avatar';
 import { ExpiredNameError, SubgraphRecordNotFound, Version } from '../base';
 import { SERVER_URL } from '../config';
 import { debug } from 'debug';
+import { inspect } from 'util';
 var _debug = debug("domains")
 
-const eth =
-  '0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae';
+const eth = '0x587d09fe5fa45354680537d38145a28b772971e0f293af3ee0c536fc919710fb' //eth => web3
+//'0x93cdeb708b7545dc668eb9280176169d1c33cfd8ed6f04690a0bcc88a93fc4ae';
 const GRACE_PERIOD_MS = 7776000000; // 90 days as milliseconds
 
 export async function getDomain(
@@ -37,10 +38,10 @@ export async function getDomain(
     hexId = tokenId;
   }
   const queryDocument: any =
-    version !== Version.v2 ? GET_DOMAINS_BY_LABELHASH : GET_DOMAINS;
+    version < Version.v2 ? GET_DOMAINS_BY_LABELHASH : GET_DOMAINS;
   const result = await request(SUBGRAPH_URL, queryDocument, { tokenId: hexId });
-  _debug("get domain by grp done:", result);
-  const domain = version !== Version.v2 ? result.domains[0] : result.domain;
+  _debug("get domain by grp done:", inspect({ queryDocument, result }, false, 5, true));
+  const domain = version < Version.v2 ? result.domains[0] : result.domain;
   if (!(domain && Object.keys(domain).length))
     throw new SubgraphRecordNotFound(`No record for ${hexId}`);
   const { name, labelhash, createdAt, parent, resolver } = domain;

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { FetchError } from 'node-fetch';
 import {
+  CallRevert,
   NFTURIParsingError,
   ResolverNotFound,
   RetrieveURIFailed,
@@ -11,6 +12,8 @@ import {
 import { RESPONSE_TIMEOUT } from '../config';
 import { getAvatarMeta } from '../service/avatar';
 import getNetwork from '../service/network';
+import { debug } from 'debug';
+var _debug = debug("avatarMetadata");
 
 export async function avatarMetadata(req: Request, res: Response) {
   // #swagger.description = 'CNS avatar metadata'
@@ -39,6 +42,7 @@ export async function avatarMetadata(req: Request, res: Response) {
       });
     }
   } catch (error: any) {
+    _debug("failed to getAvatarMeta",error)
     const errCode = (error?.code && Number(error.code)) || 500;
     if (
       error instanceof FetchError ||
@@ -46,7 +50,8 @@ export async function avatarMetadata(req: Request, res: Response) {
       error instanceof ResolverNotFound ||
       error instanceof RetrieveURIFailed ||
       error instanceof TextRecordNotFound ||
-      error instanceof UnsupportedNamespace
+      error instanceof UnsupportedNamespace||
+      error instanceof CallRevert
     ) {
       res.status(errCode).json({
         message: error.message,

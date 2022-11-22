@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import { FetchError } from 'node-fetch';
-import { ContractMismatchError, UnsupportedNetwork } from '../base';
+import { AddressFormatError, ContractMismatchError, UnsupportedNetwork } from '../base';
 import { RESPONSE_TIMEOUT } from '../config';
 import { checkContract } from '../service/contract';
 import { getDomain } from '../service/domain';
 import getNetwork from '../service/network';
 import { getLabelhash } from '../utils/labelhash';
+import { formatHexAddress } from '../service/address';
+import { debug } from 'debug';
+var _debug = debug("endImage")
 
 /* istanbul ignore next */
 export async function ensImage(req: Request, res: Response) {
@@ -17,9 +20,11 @@ export async function ensImage(req: Request, res: Response) {
     res.status(504).json({ message: 'Timeout' });
   });
 
-  const { contractAddress, networkName, tokenId: identifier } = req.params;
+  const { contractAddress: cfxContractAddr, networkName, tokenId: identifier } = req.params;
+
 
   try {
+    const contractAddress = formatHexAddress(cfxContractAddr)
     const { provider, SUBGRAPH_URL } = getNetwork(networkName);
     const { tokenId, version } = await checkContract(provider, contractAddress, identifier);
     const result = await getDomain(
@@ -46,7 +51,10 @@ export async function ensImage(req: Request, res: Response) {
         description: 'Image file'
     } */
   } catch (error) {
-    if (error instanceof FetchError || error instanceof ContractMismatchError) {
+    _debug("failed to get ens image", error)
+    if (error instanceof FetchError ||
+      error instanceof ContractMismatchError ||
+      error instanceof AddressFormatError) {
       /* #swagger.responses[404] = { 
            description: 'No results found' 
       } */

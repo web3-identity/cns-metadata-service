@@ -3,6 +3,7 @@ import { Contract } from 'ethers';
 import { Request, Response } from 'express';
 import { FetchError } from 'node-fetch';
 import {
+  AddressFormatError,
   ContractMismatchError,
   ExpiredNameError,
   UnsupportedNetwork,
@@ -18,6 +19,7 @@ import { getDomain } from '../service/domain';
 import { Metadata } from '../service/metadata';
 import getNetwork from '../service/network';
 import { constructEthNameHash } from '../utils/namehash';
+import { formatHexAddress } from '../service/address';
 import { debug } from 'debug';
 var _debug = debug("endMetadata")
 
@@ -30,11 +32,15 @@ export async function ensMetadata(req: Request, res: Response) {
     res.status(504).json({ message: 'Timeout' });
   });
 
-  const { contractAddress, networkName, tokenId: identifier } = req.params;
+  const { contractAddress: cfxContractAddr, networkName, tokenId: identifier } = req.params;
+
+
   const { provider, SUBGRAPH_URL } = getNetwork(networkName);
   try {
+    const contractAddress = formatHexAddress(cfxContractAddr)
+    _debug("parse request: cfxContractAddrk ", cfxContractAddr, contractAddress)
     var { tokenId, version } = await checkContract(provider, contractAddress, identifier);
-    _debug("check contract: %s %s", tokenId, version)
+    _debug("check contract result: %s %s", tokenId, version)
     const result = await getDomain(
       provider,
       networkName,
@@ -52,7 +58,7 @@ export async function ensMetadata(req: Request, res: Response) {
     res.json(result);
     return;
   } catch (error: any) {
-    _debug("get domain eror: ",error)
+    _debug("get domain eror: ", error)
     let errCode = (error?.code && Number(error.code)) || 500;
     /* #swagger.responses[500] = { 
              description: 'Internal Server Error'
@@ -60,7 +66,8 @@ export async function ensMetadata(req: Request, res: Response) {
     if (
       error instanceof FetchError ||
       error instanceof ContractMismatchError ||
-      error instanceof ExpiredNameError
+      error instanceof ExpiredNameError ||
+      error instanceof AddressFormatError
     ) {
       if (errCode !== 404) {
         res.status(errCode).json({

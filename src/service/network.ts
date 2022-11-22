@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { UnsupportedNetwork } from '../base';
-import { INFURA_API_KEY } from '../config';
+import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY } from '../config';
 import { debug } from 'debug';
 var _debug = debug("domains")
 
@@ -18,7 +18,14 @@ const NETWORK = {
   GOERLI: 'goerli',
   MAINNET: 'mainnet',
   TESTNET: 'testnet',
+  CFXTESTNET: 'cfxtestnet',
+  CFXMAINNET: 'cfxmainnet',
 };
+
+const SCAN = {
+  CFXTESTNET: 'https://testnet.confluxscan.io/nft/',
+  CFXMAINNET: 'https://mainnet.confluxscan.io/nft/',
+}
 
 function getWeb3URL(api: string, network: string) {
   switch (api) {
@@ -40,10 +47,12 @@ export default function getNetwork(network: string): any {
   // we will have namewrapper support and more attributes when latest subgraph goes to production
   let SUBGRAPH_URL: string;
   let WEB3_URL = WEB3_API.INFURA;
+  let CHAIN_ID = 0;
   switch (network) {
-    case NETWORK.TESTNET:
+    case NETWORK.CFXTESTNET:
       SUBGRAPH_URL = 'http://101.42.88.184:8100/subgraphs/name/graphprotocol/ens';//'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens';
-      WEB3_URL = getWeb3URL(WEB3_API.CFXBRIDGE, NETWORK.TESTNET);
+      WEB3_URL = getWeb3URL(WEB3_API.CFXBRIDGE, NETWORK.CFXTESTNET);
+      CHAIN_ID = 1;
       break;
     // case NETWORK.LOCAL:
     //   SUBGRAPH_URL = 'http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens';
@@ -71,7 +80,7 @@ export default function getNetwork(network: string): any {
     default:
       throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
   }
-  const provider = new ethers.providers.StaticJsonRpcProvider(WEB3_URL);
+  const provider = new ethers.providers.StaticJsonRpcProvider(WEB3_URL, { name: network, chainId: CHAIN_ID, ensAddress: ADDRESS_ETH_REGISTRY });
 
   provider.on('debug', (info) => {
     // console.log(info.action);
@@ -79,10 +88,32 @@ export default function getNetwork(network: string): any {
     _debug('<=', {
       request: info.request,
       response: info.response,
-      error:  info.error,
+      error: info.error,
       provider: info.provider.connection,
     });
     // console.log(info.provider);
   });
   return { WEB3_URL, SUBGRAPH_URL, provider };
+}
+
+export function getScanUrl(network: string): string {
+  switch (network) {
+    case NETWORK.CFXTESTNET:
+      return SCAN.CFXTESTNET;
+    case NETWORK.CFXMAINNET:
+      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
+    default:
+      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
+  }
+}
+
+export function getChainID(network: string): number {
+  switch (network) {
+    case NETWORK.CFXTESTNET:
+      return 1;
+    case NETWORK.CFXMAINNET:
+      return 1029;
+    default:
+      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
+  }
 }

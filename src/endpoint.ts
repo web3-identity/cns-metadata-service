@@ -13,18 +13,19 @@ export default function (app: Express) {
     res.send('Well done mate To see more go to "/docs"!');
   });
 
+  // (0x[a-fA-F0-9]{40}|(cfx|cfxtest|net\d+):(type\.user:|type\.builtin:|type\.contract:|type\.null:|)\w{42})
   app.get(
-    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40})/:tokenId',
+    '/:networkName/:contractAddress/:tokenId',
     ensMetadata
   );
 
   app.get(
-    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40})/:tokenId/image',
+    '/:networkName/:contractAddress/:tokenId/image',
     ensImage
   );
 
   app.get(
-    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40})/:tokenId/rasterize',
+    '/:networkName/:contractAddress/:tokenId/rasterize',
     ensRasterize
   );
 

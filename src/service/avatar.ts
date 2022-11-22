@@ -1,43 +1,48 @@
-import { AvatarResolver }   from '@ensdomains/ens-avatar';
-import { BaseProvider }     from '@ethersproject/providers';
+import { AvatarResolver } from '@ensdomains/ens-avatar';
+import { BaseProvider } from '@ethersproject/providers';
 import { strict as assert } from 'assert';
-import { JSDOM }            from 'jsdom';
-import fetch                from 'node-fetch';
+import { JSDOM } from 'jsdom';
+import fetch from 'node-fetch';
 import {
+  CallRevert,
   ResolverNotFound,
   RetrieveURIFailed,
   TextRecordNotFound,
-}                           from '../base';
-import { IPFS_GATEWAY }     from '../config';
+} from '../base';
+import { IPFS_GATEWAY } from '../config';
+import { getScanUrl,getChainID } from './network';
+import { format } from 'js-conflux-sdk'
+import { debug } from 'debug';
+var _debug = debug("avatar");
 
 const window = new JSDOM('').window;
 
 interface HostMeta {
-  chain_id?        : number;
-  namespace?       : string;
+  chain_id?: number;
+  namespace?: string;
   contract_address?: string;
-  token_id?        : string;
-  reference_url?   : string;
+  token_id?: string;
+  reference_url?: string;
 }
 
 export interface AvatarMetadata {
-  uri              : string;
-  animation        : string;
+  uri: string;
+  animation: string;
   animation_details: {};
-  attributes       : any[];
-  created_by       : string;
-  event            : string;
-  image_data       : string;
-  image_url        : string;
-  image_details    : string;
-  name             : string;
-  description?     : string;
-  external_link?   : string;
-  image?           : string;
-  animation_url?   : string;
-  hostType         : string;
-  host_meta        : HostMeta;
-  is_owner         : boolean;
+  attributes: any[];
+  created_by: string;
+  event: string;
+  image_data: string;
+  image_url: string;
+  image_details: string;
+  name: string;
+  description?: string;
+  external_link?: string;
+  image?: string;
+  animation_url?: string;
+  hostType: string;
+  host_meta: HostMeta;
+  is_owner: boolean;
 }
 
 export class AvatarMetadata {
@@ -56,6 +61,7 @@ export class AvatarMetadata {
         jsdomWindow: window,
       });
     } catch (error: any) {
+
       if (error instanceof Error) {
         console.log(`${this.uri} - error:`, error.message);
       }
@@ -106,12 +112,17 @@ export class AvatarMetadata {
     let metadata: any;
     try {
       metadata = await this.avtResolver.getMetadata(this.uri);
+      _debug("get avatar metadata", metadata);
     } catch (error: any) {
+      _debug("failed to get avatar metadata by avtResolver: ", error, Object.keys(error))
       if (error instanceof Error) {
         console.log(`${this.uri} - error:`, error.message);
       }
       if (typeof error === 'string') {
         console.log(`${this.uri} - error:`, error);
+      }
+      if (error.code === 'CALL_EXCEPTION') {
+        throw new CallRevert(error.toString())
       }
       throw new ResolverNotFound(
         'There is no resolver set under given address',
@@ -138,6 +149,20 @@ export class AvatarMetadata {
         );
       }
     }
+    if (metadata.host_meta) {
+      let scanUrl = getScanUrl(networkName)
+      let chainID = getChainID(networkName)
+      const hexAddr = metadata.host_meta.contract_address
+      let refUrl = metadata.host_meta.reference_url
+      metadata.host_meta.contract_address = format.address(hexAddr,chainID)
+      refUrl = refUrl?.replace("https://opensea.io/assets/", scanUrl)
+
+      // const registryAddr = refUrl?.split("/").slice(-2)[0]
+      metadata.host_meta.reference_url = refUrl?.replace(hexAddr, metadata.host_meta.contract_address)
+    }
+
+    _debug("replace avatar meta address to conflux", metadata)
+
     return metadata;
   }
 }

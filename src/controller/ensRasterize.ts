@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { rasterize } from '../service/rasterize';
+import { formatHexAddress } from '../service/address';
+import { format } from 'js-conflux-sdk';
 
 /* istanbul ignore next */
 export async function ensRasterize(req: Request, res: Response) {
@@ -7,8 +9,10 @@ export async function ensRasterize(req: Request, res: Response) {
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
   // #swagger.parameters['{}'] = { name: 'contractAddress', description: 'Contract address which stores the NFT indicated by the tokenId', schema: { $ref: '#/definitions/contractAddress' } }
   // #swagger.parameters['tokenId'] = { type: 'string', description: 'Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names', schema: { $ref: '#/definitions/tokenId' } }
-  const { contractAddress, networkName, tokenId } = req.params;
+  const { contractAddress:cfxContractAddr, networkName, tokenId } = req.params;
+
   try {
+    const contractAddress = formatHexAddress(cfxContractAddr)
     const raster = await rasterize(contractAddress, networkName, tokenId);
     const base64 = raster.replace('data:image/png;base64,', '');
     const buffer = Buffer.from(base64, 'base64');

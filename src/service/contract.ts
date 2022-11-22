@@ -24,6 +24,8 @@ export async function checkContract(
   identifier: string
 ): Promise<{ tokenId: string, version: Version }> {
   _debug("start check contract:", contractAddress, identifier)
+  return { tokenId: getNamehash(identifier), version: Version.v3 };
+
   const _contractAddress = ethers.utils.getAddress(contractAddress);
   const contract = new ethers.Contract(
     _contractAddress,

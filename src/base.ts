@@ -11,6 +11,7 @@ export enum Version {
   v1,
   v1w,
   v2,
+  v3
 }
 
 export interface BaseError {}
@@ -54,3 +55,9 @@ export class UnsupportedNetwork extends BaseError {}
 
 export interface ExpiredNameError {}
 export class ExpiredNameError extends BaseError {}
+
+export interface CallRevert {}
+export class CallRevert extends BaseError {}
+
+export interface AddressFormatError{}
+export class AddressFormatError extends BaseError {}
