@@ -13,7 +13,7 @@
             ],
             "program": "/Users/dayong/myspace/mywork/ens-metadata-service/node_modules/.bin/ts-node-dev",
             "args": ["--inspect","--","src/index.ts"],
-            "env": {"ENV":"local"},
+            "env": {"ENV":"local","DEBUG":"*"},
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
             ]
