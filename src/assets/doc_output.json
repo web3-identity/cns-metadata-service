@@ -12,7 +12,18 @@
     }
   },
   "paths": {
-    "/{networkName}/{contractAddress}/{tokenId}": {
+    "/": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})}/{tokenId}": {
       "get": {
         "description": "CNS NFT metadata",
         "parameters": [
@@ -25,7 +36,7 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})",
             "in": "path",
             "required": true,
             "schema": {
@@ -81,7 +92,7 @@
         }
       }
     },
-    "/{networkName}/{contractAddress}/{tokenId}/image": {
+    "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})}/{tokenId}/image": {
       "get": {
         "description": "CNS NFT image",
         "parameters": [
@@ -94,7 +105,7 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})",
             "in": "path",
             "required": true,
             "schema": {
@@ -135,7 +146,7 @@
         }
       }
     },
-    "/{networkName}/{contractAddress}/{tokenId}/rasterize": {
+    "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})}/{tokenId}/rasterize": {
       "get": {
         "description": "CNS NFT image rasterization",
         "parameters": [
@@ -148,7 +159,7 @@
             }
           },
           {
-            "name": "contractAddress",
+            "name": "contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})",
             "in": "path",
             "required": true,
             "schema": {

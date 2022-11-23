@@ -15,17 +15,17 @@ export default function (app: Express) {
 
   // (0x[a-fA-F0-9]{40}|(cfx|cfxtest|net\d+):(type\.user:|type\.builtin:|type\.contract:|type\.null:|)\w{42})
   app.get(
-    '/:networkName/:contractAddress/:tokenId',
+    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40}|cfx:\\w{42}|cfxtest:\\w{42})/:tokenId',
     ensMetadata
   );
 
   app.get(
-    '/:networkName/:contractAddress/:tokenId/image',
+    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40}|cfx:\\w{42}|cfxtest:\\w{42})/:tokenId/image',
     ensImage
   );
 
   app.get(
-    '/:networkName/:contractAddress/:tokenId/rasterize',
+    '/:networkName/:contractAddress(0x[a-fA-F0-9]{40}|cfx:\\w{42}|cfxtest:\\w{42})/:tokenId/rasterize',
     ensRasterize
   );
 
