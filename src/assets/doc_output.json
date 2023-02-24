@@ -12,17 +12,6 @@
     }
   },
   "paths": {
-    "/": {
-      "get": {
-        "description": "",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/{networkName}/{contractAddress(0x[a-fA-F0-9]{40}|cfx:\\\\w{42}|cfxtest:\\\\w{42})}/{tokenId}": {
       "get": {
         "description": "CNS NFT metadata",
@@ -32,7 +21,7 @@
             "in": "path",
             "required": true,
             "schema": {
-              "$ref": "#/components/schemas/networkName"
+              "type": "string"
             }
           },
           {
@@ -47,15 +36,6 @@
             "name": "tokenId",
             "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/tokenId"
-            },
-            "type": "string",
-            "description": "Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names"
-          },
-          {
-            "name": "{}",
-            "in": "query",
             "schema": {
               "type": "string"
             }

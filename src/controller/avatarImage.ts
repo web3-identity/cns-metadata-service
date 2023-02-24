@@ -11,9 +11,11 @@ import {
 import { RESPONSE_TIMEOUT } from '../config';
 import { getAvatarImage } from '../service/avatar';
 import getNetwork from '../service/network';
+import { debug } from 'debug';
+var _debug = debug("avatarImage");
 
 export async function avatarImage(req: Request, res: Response) {
-  // #swagger.description = 'cNS avatar image'
+  // #swagger.description = 'CNS avatar image'
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
   // #swagger.parameters['name'] = { description: 'cNS name', schema: { $ref: '#/definitions/cnsName' } }
   res.setTimeout(RESPONSE_TIMEOUT, () => {
@@ -24,6 +26,7 @@ export async function avatarImage(req: Request, res: Response) {
   try {
     const { provider } = getNetwork(networkName);
     const [buffer, mimeType] = await getAvatarImage(provider, name);
+    _debug('get avatar image done', buffer.length, mimeType);
     if (buffer) {
       /* #swagger.responses[200] = { 
            description: 'Image file'

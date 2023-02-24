@@ -2,7 +2,7 @@ import { ethers } from 'ethers';
 import { UnsupportedNetwork } from '../base';
 import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY } from '../config';
 import { debug } from 'debug';
-var _debug = debug("domains")
+var _debug = debug("network")
 
 const WEB3_API = {
   INFURA: 'https://infura.io/v3/',

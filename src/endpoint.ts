@@ -8,12 +8,11 @@ import { avatarImage } from './controller/avatarImage';
 import { queryNFTep } from './controller/queryNFT';
 
 export default function (app: Express) {
-  // #swagger.ignore = true
   app.get('/', (_req, res) => {
+    // #swagger.ignore = true
     res.send('Well done mate To see more go to "/docs"!');
   });
 
-  // (0x[a-fA-F0-9]{40}|(cfx|cfxtest|net\d+):(type\.user:|type\.builtin:|type\.contract:|type\.null:|)\w{42})
   app.get(
     '/:networkName/:contractAddress(0x[a-fA-F0-9]{40}|cfx:\\w{42}|cfxtest:\\w{42})/:tokenId',
     ensMetadata
@@ -35,3 +34,5 @@ export default function (app: Express) {
 
   app.get('/queryNFT', queryNFTep);
 }
+
+// (0x[a-fA-F0-9]{40}|(cfx|cfxtest|net\d+):(type\.user:|type\.builtin:|type\.contract:|type\.null:|)\w{42})
