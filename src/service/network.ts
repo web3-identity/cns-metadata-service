@@ -2,9 +2,7 @@ import { ethers } from 'ethers';
 import { UnsupportedNetwork } from '../base';
 import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY, SERVER_URL } from '../config';
 import { debug } from 'debug';
-import internal from 'stream';
-import { kMaxLength } from 'buffer';
-import { netAddress } from 'js-conflux-sdk/dist/types/util/format';
+
 var _debug = debug("network")
 
 enum NetworkType {
@@ -33,8 +31,6 @@ class NetworkInfo {
   }
 }
 
-// const SUBGRAPH_URL = "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
-
 var NetworkInfos = new Map<NetworkType, NetworkInfo>([
   [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn')],
   [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn')],
@@ -46,7 +42,7 @@ function getNetworkType(newtork: string): NetworkType {
       return k;
     }
   }
-  throw new Error("Unknown network type")
+  throw new UnsupportedNetwork("unsupported network")
 }
 
 export default function getNetwork(network: string): NetworkInfo {
@@ -56,10 +52,8 @@ export default function getNetwork(network: string): NetworkInfo {
   const networkInfo = NetworkInfos.get(networkType);
 
   if (!networkInfo) {
-    throw new Error("Network not found: " + networkType);
+    throw new UnsupportedNetwork("unsupported network")
   }
-
-  // const provider = new ethers.providers.StaticJsonRpcProvider(networkInfo?.cfxBridge, { name: network, chainId: networkInfo?.chainID || 0, ensAddress: ADDRESS_ETH_REGISTRY });
 
   networkInfo?.provider.on('debug', (info) => {
     _debug('=>', info.request);
@@ -70,6 +64,5 @@ export default function getNetwork(network: string): NetworkInfo {
       provider: info.provider.connection,
     });
   });
-  // return { WEB3_URL: serverInfo?.cfxBridge, SUBGRAPH_URL, provider };
   return networkInfo;
 }
