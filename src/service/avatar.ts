@@ -10,7 +10,7 @@ import {
   TextRecordNotFound,
 } from '../base';
 import { IPFS_GATEWAY } from '../config';
-import { getScanUrl, getChainID } from './network';
+import getNetwork from './network';
 import { format } from 'js-conflux-sdk'
 import { debug } from 'debug';
 var _debug = debug("avatar");
@@ -151,12 +151,13 @@ export class AvatarMetadata {
       }
     }
     if (metadata.host_meta) {
-      let scanUrl = getScanUrl(networkName)
-      let chainID = getChainID(networkName)
+      // let scanUrl = getScanUrl(networkName)
+      // let chainID = getChainID(networkName)
+      let {scan,chainID} = getNetwork(networkName)
       const hexAddr = metadata.host_meta.contract_address
       let refUrl = metadata.host_meta.reference_url
       metadata.host_meta.contract_address = format.address(hexAddr, chainID)
-      refUrl = refUrl?.replace("https://opensea.io/assets/", scanUrl)
+      refUrl = refUrl?.replace("https://opensea.io/assets/", scan)
 
       // const registryAddr = refUrl?.split("/").slice(-2)[0]
       metadata.host_meta.reference_url = refUrl?.replace(hexAddr, metadata.host_meta.contract_address)

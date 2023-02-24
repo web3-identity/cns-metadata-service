@@ -35,7 +35,7 @@ export async function ensMetadata(req: Request, res: Response) {
   const { contractAddress: cfxContractAddr, networkName, tokenId: identifier } = req.params;
 
 
-  const { provider, SUBGRAPH_URL } = getNetwork(networkName);
+  const { provider, subGraph: SUBGRAPH_URL } = getNetwork(networkName);
   try {
     const contractAddress = formatHexAddress(cfxContractAddr)
     _debug("parse request: cfxContractAddrk ", cfxContractAddr, contractAddress)

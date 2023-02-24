@@ -64,7 +64,7 @@ export class Metadata {
         );
     this.description =
       description ||
-      `${this.name}, an ENS name.${
+      `${this.name}, an CNS name.${
         !this.is_normalized ? ` (${name} is not in normalized form)` : ''
       }`;
     if (!is_valid || !isASCII(label)) {

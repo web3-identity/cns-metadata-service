@@ -226,7 +226,7 @@
     },
     "/{networkName}/avatar/{name}": {
       "get": {
-        "description": "cNS avatar image",
+        "description": "CNS avatar image",
         "parameters": [
           {
             "name": "networkName",
@@ -243,7 +243,7 @@
             "schema": {
               "$ref": "#/components/schemas/cnsName"
             },
-            "description": "cNS name"
+            "description": "CNS name"
           }
         ],
         "responses": {

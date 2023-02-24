@@ -1,89 +1,67 @@
 import { ethers } from 'ethers';
 import { UnsupportedNetwork } from '../base';
-import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY } from '../config';
+import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY, SERVER_URL } from '../config';
 import { debug } from 'debug';
+import internal from 'stream';
+import { kMaxLength } from 'buffer';
+import { netAddress } from 'js-conflux-sdk/dist/types/util/format';
 var _debug = debug("network")
 
-const WEB3_API = {
-  INFURA: 'https://infura.io/v3/',
-  CLOUDFLARE: 'https://web3metadata.ens.domains/v1',
-  CONFURA: 'https://confluxrpc.com',
-  CFXBRIDGE: 'http://101.42.88.184:8101',//'http://149.129.36.242:11451/bridge',//'https://cfx2eth.conflux123.xyz'
+enum NetworkType {
+  local,
+  testnet,
+  mainnet
 }
 
-const NETWORK = {
-  LOCAL: 'local',
-  RINKEBY: 'rinkeby',
-  ROPSTEN: 'ropsten',
-  GOERLI: 'goerli',
-  MAINNET: 'mainnet',
-  TESTNET: 'testnet',
-  CFXTESTNET: 'cfxtestnet',
-  CFXMAINNET: 'cfxmainnet',
-};
+class NetworkInfo {
+  chainID: number;
+  networkName: string;
+  scan: string;
+  confura: string;
+  cfxBridge: string;
+  subGraph: string;
+  provider: ethers.providers.BaseProvider
 
-const SCAN = {
-  CFXTESTNET: 'https://testnet.confluxscan.io/nft/',
-  CFXMAINNET: 'https://mainnet.confluxscan.io/nft/',
-}
-
-function getWeb3URL(api: string, network: string) {
-  switch (api) {
-    case WEB3_API.CONFURA:
-      return `${WEB3_API.CONFURA.replace('https://', `https://${network}.`)}`
-    case WEB3_API.CFXBRIDGE:
-      return WEB3_API.CFXBRIDGE
-    // case WEB3_API.INFURA:
-    //   return `${WEB3_API.INFURA.replace('https://', `https://${network}.`)}${INFURA_API_KEY}`;
-    // case WEB3_API.CLOUDFLARE:
-    //   return `${WEB3_API.CLOUDFLARE}/${network}`
-    default:
-      throw Error('');
+  constructor(_chainID: number, _networkName: string, _scan: string, _confura: string, _cfxBridge: string) {
+    this.chainID = _chainID;
+    this.networkName = _networkName;
+    this.scan = _scan
+    this.confura = _confura
+    this.cfxBridge = _cfxBridge
+    this.subGraph = "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
+    this.provider = new ethers.providers.StaticJsonRpcProvider(this.cfxBridge, { name: this.networkName, chainId: this.chainID, ensAddress: ADDRESS_ETH_REGISTRY });
   }
 }
 
-export default function getNetwork(network: string): any {
+// const SUBGRAPH_URL = "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
+
+var NetworkInfos = new Map<NetworkType, NetworkInfo>([
+  [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn')],
+  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn')],
+])
+
+function getNetworkType(newtork: string): NetworkType {
+  for (const [k, v] of NetworkInfos) {
+    if (v.networkName == newtork) {
+      return k;
+    }
+  }
+  throw new Error("Unknown network type")
+}
+
+export default function getNetwork(network: string): NetworkInfo {
   // currently subgraphs used under this function are outdated,
   // we will have namewrapper support and more attributes when latest subgraph goes to production
-  let SUBGRAPH_URL: string;
-  let WEB3_URL = WEB3_API.INFURA;
-  let CHAIN_ID = 0;
-  switch (network) {
-    case NETWORK.CFXTESTNET:
-      SUBGRAPH_URL = 'http://101.42.88.184:8100/subgraphs/name/graphprotocol/ens';//'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens';
-      WEB3_URL = getWeb3URL(WEB3_API.CFXBRIDGE, NETWORK.CFXTESTNET);
-      CHAIN_ID = 1;
-      break;
-    // case NETWORK.LOCAL:
-    //   SUBGRAPH_URL = 'http://127.0.0.1:8000/subgraphs/name/graphprotocol/ens';
-    //   WEB3_URL = getWeb3URL(WEB3_URL, NETWORK.RINKEBY);
-    //   break;
-    // case NETWORK.RINKEBY:
-    //   SUBGRAPH_URL =
-    //     'https://api.thegraph.com/subgraphs/name/makoto/ensrinkeby';
-    //   WEB3_URL = getWeb3URL(WEB3_URL, NETWORK.RINKEBY);
-    //   break;
-    // case NETWORK.ROPSTEN:
-    //   SUBGRAPH_URL =
-    //     'https://api.thegraph.com/subgraphs/name/ensdomains/ensropsten';
-    //   WEB3_URL = getWeb3URL(WEB3_URL, NETWORK.ROPSTEN);
-    //   break;
-    // case NETWORK.GOERLI:
-    //   SUBGRAPH_URL =
-    //     'https://api.thegraph.com/subgraphs/name/ensdomains/ensgoerli';
-    //   WEB3_URL = getWeb3URL(WEB3_URL, NETWORK.GOERLI);
-    //   break;
-    // case NETWORK.MAINNET:
-    //   SUBGRAPH_URL = 'https://api.thegraph.com/subgraphs/name/ensdomains/ens';
-    //   WEB3_URL = getWeb3URL(WEB3_URL, NETWORK.MAINNET);
-    //   break;
-    default:
-      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
-  }
-  const provider = new ethers.providers.StaticJsonRpcProvider(WEB3_URL, { name: network, chainId: CHAIN_ID, ensAddress: ADDRESS_ETH_REGISTRY });
+  const networkType = getNetworkType(network);
+  const networkInfo = NetworkInfos.get(networkType);
 
-  provider.on('debug', (info) => {
-    // console.log(info.action);
+  if (!networkInfo) {
+    throw new Error("Network not found: " + networkType);
+  }
+
+  // const provider = new ethers.providers.StaticJsonRpcProvider(networkInfo?.cfxBridge, { name: network, chainId: networkInfo?.chainID || 0, ensAddress: ADDRESS_ETH_REGISTRY });
+
+  networkInfo?.provider.on('debug', (info) => {
     _debug('=>', info.request);
     _debug('<=', {
       request: info.request,
@@ -91,29 +69,7 @@ export default function getNetwork(network: string): any {
       error: info.error,
       provider: info.provider.connection,
     });
-    // console.log(info.provider);
   });
-  return { WEB3_URL, SUBGRAPH_URL, provider };
-}
-
-export function getScanUrl(network: string): string {
-  switch (network) {
-    case NETWORK.CFXTESTNET:
-      return SCAN.CFXTESTNET;
-    case NETWORK.CFXMAINNET:
-      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
-    default:
-      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
-  }
-}
-
-export function getChainID(network: string): number {
-  switch (network) {
-    case NETWORK.CFXTESTNET:
-      return 1;
-    case NETWORK.CFXMAINNET:
-      return 1029;
-    default:
-      throw new UnsupportedNetwork(`Unknown network '${network}'`, 400);
-  }
+  // return { WEB3_URL: serverInfo?.cfxBridge, SUBGRAPH_URL, provider };
+  return networkInfo;
 }

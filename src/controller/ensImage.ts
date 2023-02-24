@@ -25,7 +25,7 @@ export async function ensImage(req: Request, res: Response) {
 
   try {
     const contractAddress = formatHexAddress(cfxContractAddr)
-    const { provider, SUBGRAPH_URL } = getNetwork(networkName);
+    const { provider, subGraph: SUBGRAPH_URL } = getNetwork(networkName);
     const { tokenId, version } = await checkContract(provider, contractAddress, identifier);
     const result = await getDomain(
       provider,

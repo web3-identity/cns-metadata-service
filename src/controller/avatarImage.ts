@@ -17,7 +17,7 @@ var _debug = debug("avatarImage");
 export async function avatarImage(req: Request, res: Response) {
   // #swagger.description = 'CNS avatar image'
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
-  // #swagger.parameters['name'] = { description: 'cNS name', schema: { $ref: '#/definitions/cnsName' } }
+  // #swagger.parameters['name'] = { description: 'CNS name', schema: { $ref: '#/definitions/cnsName' } }
   res.setTimeout(RESPONSE_TIMEOUT, () => {
     res.status(504).json({ message: 'Timeout' });
   })
