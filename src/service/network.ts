@@ -34,7 +34,7 @@ class NetworkInfo {
 
 var NetworkInfos = new Map<NetworkType, NetworkInfo>([
   [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn', 'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens')],
-  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn', '')],
+  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn', 'https://thegraph-mainnet.conflux123.xyz/subgraphs/name/graphprotocol/ens')],
 ])
 
 function getNetworkType(newtork: string): NetworkType {
