@@ -5,3 +5,5 @@ node_modules
 yarn-error.log
 dist/
 package-lock.json
+src/test/*.svg
+.vscode/settings.json

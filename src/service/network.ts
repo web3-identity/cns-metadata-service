@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { UnsupportedNetwork } from '../base';
 import { INFURA_API_KEY, ADDRESS_ETH_REGISTRY, SERVER_URL } from '../config';
 import { debug } from 'debug';
+import { env } from 'process';
 
 var _debug = debug("network")
 
@@ -20,20 +21,20 @@ class NetworkInfo {
   subGraph: string;
   provider: ethers.providers.BaseProvider
 
-  constructor(_chainID: number, _networkName: string, _scan: string, _confura: string, _cfxBridge: string) {
+  constructor(_chainID: number, _networkName: string, _scan: string, _confura: string, _cfxBridge: string, _subgraph: string) {
     this.chainID = _chainID;
     this.networkName = _networkName;
     this.scan = _scan
     this.confura = _confura
     this.cfxBridge = _cfxBridge
-    this.subGraph = "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
+    this.subGraph = process.env.SUBGRPAH || _subgraph || "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
     this.provider = new ethers.providers.StaticJsonRpcProvider(this.cfxBridge, { name: this.networkName, chainId: this.chainID, ensAddress: ADDRESS_ETH_REGISTRY });
   }
 }
 
 var NetworkInfos = new Map<NetworkType, NetworkInfo>([
-  [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn')],
-  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn')],
+  [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn', 'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens')],
+  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn', '')],
 ])
 
 function getNetworkType(newtork: string): NetworkType {
