@@ -7,7 +7,7 @@ import { format } from 'js-conflux-sdk';
 export async function ensRasterize(req: Request, res: Response) {
   // #swagger.description = 'CNS NFT image rasterization'
   // #swagger.parameters['networkName'] = { schema: { $ref: '#/definitions/networkName' } }
-  // #swagger.parameters['{}'] = { name: 'contractAddress', description: 'Contract address which stores the NFT indicated by the tokenId', schema: { $ref: '#/definitions/contractAddress' } }
+  // #swagger.parameters['contractAddress'] = { name: 'contractAddress', description: 'Contract address which stores the NFT indicated by the tokenId', schema: { $ref: '#/definitions/contractAddress' } }
   // #swagger.parameters['tokenId'] = { type: 'string', description: 'Labelhash(v1) /Namehash(v2) of your CNS name.\n\nMore: https://docs.cns.domains/contract-api-reference/name-processing#hashing-names', schema: { $ref: '#/definitions/tokenId' } }
   const { contractAddress:cfxContractAddr, networkName, tokenId } = req.params;
 
