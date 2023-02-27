@@ -72,10 +72,10 @@ yarn dev
 ```
 
 
-## How to deploy
+## How to deploy (production environment)
 
 ```
-yarn start:prod
+HOST=your_server_base_url yarn start:prod
 ```
 
 
