@@ -37,7 +37,7 @@
     "build": "tsc --project ./ && cpx 'src/assets/**' 'dist/assets'",
     "dev": "ENV=local ts-node-dev --inspect -- src/index.ts",
     "start": "node dist/index.js",
-    "start:prod": "yarn build && ENV=prod PORT=8082 yarn start",
+    "start:prod": "yarn build && ENV=prod PORT=8083 yarn start",
     "deploy": "ENV=prod yarn build && gcloud app deploy --project=cns-metadata-service",
     "deploy:core": "ENV=prod yarn build",
     "deploy:test": "ENV=prod yarn build && gcloud app deploy --no-promote --project=cns-metadata-service",

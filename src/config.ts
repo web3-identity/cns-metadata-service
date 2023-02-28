@@ -19,7 +19,7 @@ const ADDRESS_NAME_WRAPPER = process.env.ADDRESS_NAME_WRAPPER || '0x80c166984740
 
 const SERVER_URL =
   ENV === 'local' ? `http://localhost:${PORT}` : `${HOST}`;
-const APP_URL = 'https://app-test.web3verse.space'
+const APP_URL = 'https://app.web3verse.space'
 
 const ETH_REGISTRY_ABI = [
   'function recordExists(bytes32 node) external view returns (bool)'
