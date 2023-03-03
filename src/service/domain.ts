@@ -48,7 +48,7 @@ export async function getDomain(
 
   const metadata = new Metadata({
     name,
-    created_date: createdAt,
+    created_date: createdAt / 1000,
     tokenId: hexId,
     version,
   });
@@ -103,17 +103,18 @@ export async function getDomain(
         metadata.addAttribute({
           trait_type: 'Registration Date',
           display_type: 'date',
-          value: registered_date,
+          value: registered_date / 1000,
         });
         metadata.addAttribute({
           trait_type: 'Expiration Date',
           display_type: 'date',
-          value: expiration_date,
+          value: expiration_date / 1000,
         });
       }
     }
   }
   const isAvatarExist = resolver?.texts && resolver.texts.includes('avatar');
   await Promise.all([requestMedia(isAvatarExist), requestAttributes()]);
+
   return metadata;
 }
