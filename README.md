@@ -22,38 +22,54 @@
 
 Request (example)
 
-https://metadata.cns.domains/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/42219085255511335250589442208301538195142221433306354426240614732612795430543/
+https://app.web3verse.space/metadata/cfxmainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5a907a3e636d6d6b587f784e23b74c6534793e8abcb2a1e5216edb4abb5a8c66
 
 ### Response (example)
 
 ```json
 {
-  "name": "nick.web3",
-  "description": "nick.web3, an CNS name.",
+  "is_normalized": true,
+  "name": "test1.web3",
+  "description": "test1.web3, an CNS name.",
   "attributes": [
     {
       "trait_type": "Created Date",
       "display_type": "date",
-      "value": 1580803395000
+      "value": 1677565588000
+    },
+    {
+      "trait_type": "Length",
+      "display_type": "number",
+      "value": 5
+    },
+    {
+      "trait_type": "Segment Length",
+      "display_type": "number",
+      "value": 5
+    },
+    {
+      "trait_type": "Character Set",
+      "display_type": "string",
+      "value": "alphanumeric"
     },
     {
       "trait_type": "Registration Date",
       "display_type": "date",
-      "value": 1580803395000
+      "value": 1677565588000
     },
     {
       "trait_type": "Expiration Date",
       "display_type": "date",
-      "value": 1698131707000
+      "value": 1709101588000
     }
   ],
-  "name_length": 4,
-  "short_name": null,
-  "length": 0,
-  "url": "https://app.cns.domains/name/nick.web3",
-  "version": 0,
-  "background_image": "https://metadata.cns.domains/mainnet/avatar/nick.web3",
-  "image_url": "https://metadata.cns.domains/mainnet/0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85/0x5d5727cb0fb76e4944eafb88ec9a3cf0b3c9025a4b2f947729137c5d7f84f68f/image"
+  "name_length": 5,
+  "segment_length": 5,
+  "url": "https://app.web3verse.space/setting/test1.web3",
+  "version": 3,
+  "background_image": "https://app.web3verse.space/metadata/cfxmainnet/avatar/test1.web3",
+  "image": "https://app.web3verse.space/metadata/cfxmainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/0x5a907a3e636d6d6b587f784e23b74c6534793e8abcb2a1e5216edb4abb5a8c66/image",
+  "image_url": "https://app.web3verse.space/metadata/cfxmainnet/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85/0x5a907a3e636d6d6b587f784e23b74c6534793e8abcb2a1e5216edb4abb5a8c66/image"
 }
 
 ```
@@ -68,9 +84,12 @@ git clone https://github.com/web3-identity/cns-metadata-service.git
 cd cns-metadata-service
 cp .env.org .env // Fill in Vars
 yarn
-yarn dev
 ```
 
+## How to deploy (local enviorment)
+```
+yarn dev
+```
 
 ## How to deploy (production environment)
 
