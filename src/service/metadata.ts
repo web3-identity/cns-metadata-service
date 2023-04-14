@@ -60,7 +60,7 @@ export class Metadata {
       ? name
       : tokenId.replace(
           new RegExp('^(.{0,6}).*(.{4})$', 'im'),
-          '[$1...$2].eth'
+          '[$1...$2].web3'
         );
     this.description =
       description ||

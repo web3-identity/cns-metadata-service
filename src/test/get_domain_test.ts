@@ -6,7 +6,7 @@ import {
 } from '../service/subgraph';
 
 const SUBGRAPH_URL = "https://graphql-replica.swappi.io/subgraphs/name/graphprotocol/ens"//'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens'//"https://thegraph-mainnet.conflux123.xyz/subgraphs/name/graphprotocol/ens"//"https://graphql-replica.swappi.io/subgraphs/name/graphprotocol/ens"
-const hexId = "0x000570736c004a8d29899cd27ab192649504b5ddbf822ac96989b4c33990796b"
+const hexId = "0x000570736c004a8d29899cd27ab192649504b5ddbf822ac96989b4c33990796b".toLowerCase()
 
 console.log({ SUBGRAPH_URL, GET_DOMAINS, hexId })
 
