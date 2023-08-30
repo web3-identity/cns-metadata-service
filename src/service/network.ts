@@ -27,14 +27,14 @@ class NetworkInfo {
     this.scan = _scan
     this.confura = _confura
     this.cfxBridge = _cfxBridge
-    this.subGraph = process.env.SUBGRPAH || _subgraph || "https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens"
+    this.subGraph = process.env.SUBGRAPH || _subgraph || "https://cfx.congraph.io/subgraphs/name/graphprotocol/ens"
     this.provider = new ethers.providers.StaticJsonRpcProvider(this.cfxBridge, { name: this.networkName, chainId: this.chainID, ensAddress: ADDRESS_ETH_REGISTRY });
   }
 }
 
 var NetworkInfos = new Map<NetworkType, NetworkInfo>([
   [NetworkType.testnet, new NetworkInfo(1, 'cfxtestnet', 'https://testnet.confluxscan.io/nft/', 'https://testnet.confluxrpc.com', 'https://cfx2ethtest.nftrainbow.cn', 'https://thegraph.conflux123.xyz/subgraphs/name/graphprotocol/ens')],
-  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn', 'https://graphql-replica.swappi.io/subgraphs/name/graphprotocol/ens')],
+  [NetworkType.mainnet, new NetworkInfo(1029, 'cfxmainnet', 'https://mainnet.confluxscan.io/nft/', 'https://mainnet.confluxrpc.com', 'https://cfx2eth.nftrainbow.cn', 'https://cfx.congraph.io/subgraphs/name/graphprotocol/ens')],
 ])
 
 function getNetworkType(newtork: string): NetworkType {
